@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 
 const AddProduct = () => {
   //test addProduct
+  //test push
   const [image, setImage] = useState(false);
   const [productDetail, setProductDetail] = useState({
     title: "",

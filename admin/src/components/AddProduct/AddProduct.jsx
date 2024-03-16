@@ -3,6 +3,7 @@ import upload_area from "../../Assets/upload_area.svg";
 import { toast } from "react-toastify";
 
 const AddProduct = () => {
+  //test addProduct
   const [image, setImage] = useState(false);
   const [productDetail, setProductDetail] = useState({
     title: "",

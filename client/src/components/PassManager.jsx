@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
+import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 import {
+  FaCopy,
+  FaCopyright,
   FaEye,
   FaEyeSlash,
-  FaPersonBooth,
   FaTrash,
   FaUserEdit,
   FaUserPlus,
@@ -54,6 +57,15 @@ const PassManager = () => {
     form.userUrl.trim() === "" ||
     form.webiteName.trim() === "" ||
     form.passWord.trim() === "";
+
+  const deletePassword = () => {
+    window.confirm(`Are you sure to delete ${form.webiteName}?`);
+  };
+
+  const copyText = (text) => {
+    toast.success("Copied to Clipboard");
+    navigator.clipboard.writeText(text);
+  };
 
   return (
     <>
@@ -144,18 +156,40 @@ const PassManager = () => {
                   <tbody className="bg-green-100">
                     {passwordArray.map((password, index) => (
                       <tr key={index} className="hover:bg-green-200">
-                        <td className="py-3">
+                        <td className="py-3 relative">
                           <a
                             href={`https://www.${password.userUrl}`}
                             target="_blank"
+                            rel="noopener noreferrer"
                             className="text-blue-600 hover:underline"
                           >
                             {password.userUrl}
                           </a>
+                          <p
+                            className="absolute right-0 bottom-0 mr-1 mb-5"
+                            onClick={() => copyText(password.userUrl)}
+                          >
+                            <FaCopy className="text-gray-700 hover:text-gray-600 cursor-pointer" />
+                          </p>
                         </td>
-                        <td className="py-3">{password.webiteName}</td>
-                        <td className="py-3">
+                        <td className="py-3 relative">
+                          {password.webiteName}
+                          <p
+                            className="absolute right-0 bottom-0 mr-1 mb-5"
+                            onClick={() => copyText(password.webiteName)}
+                          >
+                            <FaCopy className="text-gray-700 hover:text-gray-600 cursor-pointer" />
+                          </p>
+                        </td>
+                        <td className="py-3 relative">
                           <span>{password.passWord}</span>
+                          <p
+                            className="absolute right-0 bottom-0 mr-1 mb-5"
+                            onClick={() => copyText(password.passWord)}
+                          >
+                            <FaCopy className="text-gray-700 hover:text-gray-600 cursor-pointer" />
+                          </p>
+
                           <button
                             className="ml-2 text-green-600 hover:text-green-900"
                             // onClick={() => togglePassVisibility(index)}
@@ -176,7 +210,7 @@ const PassManager = () => {
                           </button>
                           <button
                             className="ml-2 text-gray-900 hover:underline text-xl hover:text-red-600 "
-                            // onClick={() => deletePassword(index)}
+                            onClick={() => deletePassword(index)}
                           >
                             <FaTrash />
                           </button>

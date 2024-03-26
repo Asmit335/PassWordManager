@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "./components/Navbar";
 import PassManager from "./components/PassManager";
 import Footer from "./components/Footer";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
   return (
@@ -11,6 +12,7 @@ const App = () => {
         <PassManager />
       </div>
       <Footer />
+      <ToastContainer />
     </>
   );
 };

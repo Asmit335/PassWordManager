@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
+import { v4 as uuidv4 } from "uuid";
+
 import {
   FaCopy,
-  FaCopyright,
   FaEye,
   FaEyeSlash,
   FaTrash,
@@ -44,13 +45,17 @@ const PassManager = () => {
       return;
     }
 
-    setPasswordArray([...passwordArray, form]);
-    localStorage.setItem("passwords", JSON.stringify([...passwordArray, form]));
+    setPasswordArray([...passwordArray, { ...form, id: uuidv4() }]);
+    localStorage.setItem(
+      "passwords",
+      JSON.stringify([...passwordArray, { ...form, id: uuidv4() }])
+    );
     setForm({
       userUrl: "",
       webiteName: "",
       passWord: "",
     });
+    toast.success("Saved Successfully");
   };
 
   const isDataEmpty =
@@ -58,8 +63,23 @@ const PassManager = () => {
     form.webiteName.trim() === "" ||
     form.passWord.trim() === "";
 
-  const deletePassword = () => {
-    window.confirm(`Are you sure to delete ${form.webiteName}?`);
+  const editPassword = (id) => {
+    setForm(passwordArray.filter((i) => i.id === id)[0]);
+    setPasswordArray(passwordArray.filter((e) => e.id !== id));
+    console.log("Editing the id :", id);
+  };
+
+  const deletePassword = (id, webiteName) => {
+    let confirmm = confirm(`Are you sure to delete ${webiteName}?`);
+    if (confirmm) {
+      setPasswordArray(passwordArray.filter((e) => e.id !== id));
+      localStorage.setItem(
+        "passwords",
+        JSON.stringify(passwordArray.filter((e) => e.id !== id))
+      );
+      console.log("Deleting data with ID:", id);
+      toast.success("Deleted Successfully");
+    }
   };
 
   const copyText = (text) => {
@@ -69,7 +89,7 @@ const PassManager = () => {
 
   return (
     <>
-      <main className="container mx-auto text-center ">
+      <main className="md:container mx-auto text-center ">
         <div className="mt-8">
           <h1 className="  font-bold text-3xl text-green-700">
             <span className="text-gray-900">&lt;</span>PassWord Manager
@@ -81,7 +101,7 @@ const PassManager = () => {
           <p className="text-gray-600">Your own PassWord Manager</p>
         </div>
 
-        <div className="container mx-auto p-4">
+        <div className="md:container mx-auto p-4">
           <input
             type="text"
             name="userUrl"
@@ -90,7 +110,7 @@ const PassManager = () => {
             placeholder="Enter Website URL"
             className="p-3 mb-4 rounded-full border border-green-700 w-full"
           />
-          <div className="flex justify-center ">
+          <div className="flex justify-center">
             <div className="max-w-lg flex w-full sm:flex">
               <input
                 type="text"
@@ -130,7 +150,7 @@ const PassManager = () => {
             onClick={AddData}
           >
             <FaUserPlus className="mr-2 text-2xl" />
-            Add
+            Save
           </button>
         </div>
 
@@ -204,13 +224,15 @@ const PassManager = () => {
                         <td className="py-3">
                           <button
                             className="text-blue-600 text-2xl hover:underline hover:text-black "
-                            // onClick={() => editPassword(index)}
+                            onClick={() => editPassword(password.id)}
                           >
                             <FaUserEdit />
                           </button>
                           <button
                             className="ml-2 text-gray-900 hover:underline text-xl hover:text-red-600 "
-                            onClick={() => deletePassword(index)}
+                            onClick={() =>
+                              deletePassword(password.id, password.webiteName)
+                            }
                           >
                             <FaTrash />
                           </button>

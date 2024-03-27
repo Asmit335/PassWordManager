@@ -2,7 +2,6 @@ import express from 'express'
 import mongoose from 'mongoose'
 import dotenv from 'dotenv'
 dotenv.config()
-    // import UserModel1 from '../models/user.js';
 
 import UserModel1 from './models/user.js'
 
@@ -26,5 +25,5 @@ mongoose.connect(process.env.MONGODB_URI)
         console.log("Connected to MONGODB");
     })
     .catch(e => {
-        console.log("Error Connecting.");
+        console.log("Error Connecting.", e);
     })
